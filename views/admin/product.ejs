@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+
+<!-- =========================================================
+* Sneat - Bootstrap 5 HTML Admin Template - Pro | v1.0.0
+==============================================================
+
+* Product Page: https://themeselection.com/products/sneat-bootstrap-html-admin-template/
+* Created by: ThemeSelection
+* License: You must have a valid license purchased in order to legally use the theme for your project.
+* Copyright ThemeSelection (https://themeselection.com)
+
+=========================================================
+ -->
+<!-- beautify ignore:start -->
+<html
+  lang="en"
+  class="light-style layout-menu-fixed"
+  dir="ltr"
+  data-theme="theme-default"
+  data-assets-path="../assets/"
+  data-template="vertical-menu-template-free"
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+    />
+
+    <title>Rio-Fashion</title>
+
+    <meta name="description" content="" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Icons. Uncomment required icon fonts -->
+    <link rel="stylesheet" href="../assets/vendor/fonts/boxicons.css" />
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="../assets/vendor/css/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="../assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="../assets/css/demo.css" />
+
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+
+    <link rel="stylesheet" href="../assets/vendor/libs/apex-charts/apex-charts.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+<!-- jQuery library -->
+
+<!-- Main JS -->
+
+
+<!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.1/css/jquery.dataTables.min.css">
+
+<!-- DataTables JavaScript -->
+
+
+
+    <!-- Page CSS -->
+
+    <!-- Helpers -->
+    <script src="../assets/vendor/js/helpers.js"></script>
+
+    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+    <script src="../assets/js/config.js"></script>
+  </head>
+
+  <body >
+
+    <style>
+      .preview-container {
+        display: inline-block;
+        text-align: center;
+        margin: 5px;
+      }
+      
+      .preview-image {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+      }
+      
+      .remove-button {
+        margin-top: 5px;
+        cursor: pointer;
+        background-color: #f44336;
+        color: #fff;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+      }
+      </style>
+      
+    
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        <!-- Menu -->
+
+
+        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+          <%- include('../admin/partials/sidebar.ejs') %>
+        </aside>
+        <!-- / Menu -->
+
+        <!-- Layout container -->
+        <div class="layout-page">
+          <!-- Navbar -->
+
+          <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
+            <%- include('../admin/partials/navbar.ejs') %>
+          </nav>
+
+ <div class="container-xxl flex-grow-1 container-p-y">
+    <div class="content-wrapper">
+          
+<!-- Responsive Table -->
+
+<!-- Responsive Table -->
+<div class="card">
+  <div class="p-2">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Addproduct">Add Product</button>
+  </div>
+  <h5 class="card-header">Products List</h5>
+  <% if (typeof message !== 'undefined') { %>
+    <p style="color:#fb4e37">
+      <%= message %>
+    </p>
+  <% } %>
+  <div class="table-responsive text-nowrap">
+    <table class="table" id="dataTable" >
+      <thead>
+        <tr class="text-nowrap">
+          <th>No.</th>
+          <th>Image</th>
+          <th>Title</th>
+          <th>Category</th>
+         
+          <th>Brand</th>
+          <th>Description</th>
+          <th>Quantity</th>
+          <th>Selling Price</th>
+          <th>Offer Price</th>
+          <th>Edit</th>
+          <th>List/Unlist</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% Products.reverse().forEach(function(product, index) { %>
+          <tr>
+            <th scope="row"><%= index + 1 %></th>
+            <td>
+              <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
+                <li
+                  data-bs-toggle="tooltip"
+                  data-popup="tooltip-custom"
+                  data-bs-placement="top"
+                  title="<%= product.name %>"
+                >
+                <img src="/images/<%= product.image[0] %>" style="width: 70px; height: 70px;" />
+
+                </li>
+              </ul>
+            </td>
+            <td><%= product.title %></td>
+            <td>
+              <% if (product.category) { %>
+                <% categories.forEach(function(category) { %>
+                  <% if (category._id.toString() === product.category.toString()) { %>
+                    <span class="d-inline-block text-truncate" style="max-width: 150px;">
+                      <%= category.name %>
+                    </span>
+                  <% } %>
+                <% }); %>
+              <% } %>
+            </td>
+            
+            <td><%= product.brand %></td>
+            <td><%= product.description %></td>
+            <td><%= product.quantity %></td>
+            <td><%= product.sellingprice %></td>
+            <td><%= product.offerprice %></td>
+            <td>
+              <div>
+                <a href="/admin/product/editproduct/<%= product._id %>">
+                <button type="button" class="btn btn-primary" >Edit</button></a>
+              </div>
+              
+            </td>
+            <td>
+              <a href="/admin/product/action/<%= product._id %>">
+                <% if (product.isDeleted) { %>
+                  <button type="button" class="btn btn-success">List</button>
+                <% } else { %>
+                  <button type="button" class="btn btn-danger">Unlist</button>
+                <% } %>
+              </a>
+            </td>
+          </tr>
+          
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+
+</div>
+</div>
+
+
+
+
+
+
+
+<!--Add Product Modal -->
+<form action="/admin/addproduct" method="post" enctype="multipart/form-data" onsubmit="return validateForm()" name="addProductForm">
+  <div class="modal fade" id="Addproduct" tabindex="-1" aria-labelledby="AddproductLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="AddproductLabel">Add Product</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+        
+
+          <div class="mb-3">
+            <label for="categoryName" class="form-label">Category</label>
+            <select name="category" class="form-control" id="categoryName" onchange="toggleSizeField()">
+              <% categories.forEach(function(category) { %>
+                <option value="<%= category._id %>"><%= category.name %></option>
+              <% }) %>
+            </select>
+          </div>
+        
+          <!-- Size field (dropdown) -->
+          <div class="mb-3" id="sizeField">
+            <label for="categorySize" class="form-label">Size</label>
+            <select name="size" class="form-control" id="categorySize">
+              <option value="S">Small</option>
+              <option value="M">Medium</option>
+              <option value="L">Large</option>
+              <!-- Add more size options if needed -->
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="categoryName" class="form-label">Title</label>
+            <input type="text" name="title" class="form-control" id="categoryName" placeholder="Enter Title name">
+            <span id="title-error" class="error"></span>
+          </div>
+          
+          <div class="mb-3">
+            <label for="categoryName" class="form-label">Brand</label>
+            <input type="text" name="brand" class="form-control" id="categoryName" placeholder="Enter Brand name" >
+            <span id="brand-error" class="error"></span>
+          </div>
+          <div class="mb-3">
+            <label for="categoryName" class="form-label">Description</label>
+            <input type="text" name="description" class="form-control" id="categoryName" placeholder="Enter Description" >
+            <span id="description-error" class="error"></span>
+          </div>
+          <div class="mb-3">
+            <label for="categoryName" class="form-label">Quantity</label>
+            <input type="number" name="quantity" class="form-control" id="categoryName" placeholder="Enter Rating" >
+            <span id="quantity-error" class="error"></span>
+          </div>
+          
+          <div class="mb-3">
+            <label for="categoryName" class="form-label">Selling Price</label>
+            <input type="tel" name="sellingprice" class="form-control" id="categoryName" min="1" placeholder="Enter Selling price" >
+            <span id="sellingprice-error" class="error"></span>
+          </div>
+          <div class="mb-3">
+            <label for="categoryName" class="form-label">Offer Price</label>
+            <input type="tel" name="offerprice" class="form-control" id="categoryName" min="1" placeholder="Enter Offer price" >
+            <span id="offerprice-error" class="error"></span>
+          </div>
+          <div class="mb-3">
+            <label for="categoryImage" class="form-label">Upload Product Image</label>
+            <input type="file" name="image[]" class="form-control" accept="image/*" id="productImage" multiple >
+          </div>
+          <div id="imagePreviewContainer"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Add Product</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+
+
+            <!-- Footer -->
+            <footer class="content-footer footer bg-footer-theme">
+              <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+            
+             
+              </div>
+            </footer>
+            <!-- / Footer -->
+
+            <div class="content-backdrop fade"></div>
+          </div>
+          <!-- Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+      </div>
+
+      <!-- Overlay -->
+      <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <!-- / Layout wrapper -->
+
+    <!-- Core JS -->
+    <!-- build:js assets/vendor/js/core.js -->
+    <script src="../assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="../assets/vendor/libs/popper/popper.js"></script>
+    <script src="../assets/vendor/js/bootstrap.js"></script>
+    <script src="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+
+    <script src="../assets/vendor/js/menu.js"></script>
+    <!-- endbuild -->
+
+    <!-- Vendors JS -->
+    <script src="../assets/vendor/libs/apex-charts/apexcharts.js"></script>
+ 
+    <script src="../assets/js/main.js"></script>
+    <script src="https://cdn.datatables.net/1.11.1/js/jquery.dataTables.min.js"></script>
+    <!-- Page JS -->
+    <script src="../assets/js/dashboards-analytics.js"></script>
+
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+
+  </body>
+</html>
+
+
+<script src="https://cdn.datatables.net/1.11.1/js/jquery.dataTables.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('#dataTable').DataTable();
+  });
+</script>
+
+
+<script>
+  function validateForm() {
+    var title = document.forms["addProductForm"]["title"].value;
+    var brand = document.forms["addProductForm"]["brand"].value;
+    var description = document.forms["addProductForm"]["description"].value;
+    var quantity = document.forms["addProductForm"]["quantity"].value;
+    var sellingPrice = document.forms["addProductForm"]["sellingprice"].value;
+    var offerPrice = document.forms["addProductForm"]["offerprice"].value;
+
+    var titleError = document.getElementById("title-error");
+    var brandError = document.getElementById("brand-error");
+    var descriptionError = document.getElementById("description-error");
+    var quantityError = document.getElementById("quantity-error");
+    var sellingPriceError = document.getElementById("sellingprice-error");
+    var offerPriceError = document.getElementById("offerprice-error");
+
+    titleError.textContent = "";
+    brandError.textContent = "";
+    descriptionError.textContent = "";
+    quantityError.textContent = "";
+    sellingPriceError.textContent = "";
+    offerPriceError.textContent = "";
+
+    if (title.trim() === "") {
+      titleError.textContent = "Please enter the title.";
+      return false;
+    }
+
+    if (brand.trim() === "") {
+      brandError.textContent = "Please enter the brand.";
+      return false;
+    }
+
+    if (description.trim() === "") {
+      descriptionError.textContent = "Please enter the description.";
+      return false;
+    }
+
+    if (quantity.trim() === "") {
+      quantityError.textContent = "Please enter the quantity.";
+      return false;
+    }
+    if (sellingPrice.trim() === "") {
+  sellingPriceError.textContent = "Please enter the selling price.";
+  return false;
+} else if (isNaN(parseFloat(sellingPrice)) || parseFloat(sellingPrice) <= 0) {
+  sellingPriceError.textContent = "Please enter a valid positive selling price.";
+  return false;
+}
+
+if (offerPrice.trim() === "") {
+  offerPriceError.textContent = "Please enter the offer price.";
+  return false;
+} else if (isNaN(parseFloat(offerPrice)) || parseFloat(offerPrice) <= 0) {
+  offerPriceError.textContent = "Please enter a valid positive offer price.";
+  return false;
+}
+  }
+</script>
+<script>
+  function toggleSizeField() {
+    const categorySelect = document.getElementById('categoryName');
+    const sizeField = document.getElementById('sizeField');
+console.log
+    // Get the selected option value (category ID)
+    const selectedCategoryId = categorySelect.value;
+
+    // Get the option element for the selected category
+    const selectedCategoryOption = categorySelect.querySelector(`option[value="${selectedCategoryId}"]`);
+
+    // Check if the selected category is "Accessories" and hide the size field
+    if (selectedCategoryOption.innerText === 'Accessories') {
+      sizeField.style.display = 'none';
+    } else {
+      sizeField.style.display = 'block';
+    }
+  }
+</script>
+
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const imageInput = document.getElementById('productImage');
+    const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+  
+    imageInput.addEventListener('change', () => {
+      // Clear existing previews
+      imagePreviewContainer.innerHTML = '';
+  
+      // Display image previews
+      const files = imageInput.files;
+      for (const file of files) {
+        const previewContainer = document.createElement('div');
+        previewContainer.className = 'preview-container';
+  
+        const image = document.createElement('img');
+        image.src = URL.createObjectURL(file);
+        image.className = 'preview-image';
+  
+        const removeButton = document.createElement('button');
+        removeButton.textContent = 'Remove';
+        removeButton.className = 'remove-button';
+        removeButton.addEventListener('click', () => {
+          // Remove the image preview when the remove button is clicked
+          previewContainer.remove();
+        });
+  
+        previewContainer.appendChild(image);
+        previewContainer.appendChild(removeButton);
+  
+        imagePreviewContainer.appendChild(previewContainer);
+      }
+    });
+  });
+  </script>
+  

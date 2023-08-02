@@ -1,0 +1,210 @@
+<%- include('../user/partials/header.ejs') %>
+
+<!-- breadcrumb -->
+
+
+<!-- Shopping Cart -->
+<form class="bg0 p-t-75 p-b-85">
+  <div class="container">
+    <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
+      <a href="/" class="stext-109 cl8 hov-cl1 trans-04">
+        Home
+        <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+      </a>
+  
+      <span class="stext-109 cl4">
+        Shopping Cart
+      </span>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
+        <div class="m-l-25 m-r--38 m-lr-0-xl">
+          <div class="wrap-table-shopping-cart">
+            <table class="table-shopping-cart">
+              <tr class="table_head">
+                <th class="column-1">Image</th>
+                <th class="column-2">Name</th>
+                <th class="column-3">Price</th>
+                <th class="column-4">Quantity</th>
+                <th class="column-5">Total</th>
+                <th class="column-6">Action</th>
+              </tr>
+              
+              <% if (cartItems.length === 0) { %>
+              <tr>
+                <td colspan="6" class="text-center">Cart is empty</td>
+              </tr>
+              <% } else { %>
+              <% cartItems.forEach((item) => { %>
+              <tr class="table_row">
+                <td class="column-1">
+                  <div class="how-itemcart1">   <img src="<%='/images/'+item.product.image[0]%>" alt="IMG">
+                 
+                  </div>
+                </td>
+                <td class="column-2 "><%= item.product.title %> <br> <%= item.size%> <br> <% if (item.product.quantity > 0) { %>
+                  <p class="stext-102 cl6">
+                    Available Stock : <%= item.product.quantity %>
+                  </p>
+                <% } else { %>
+                  <p class="stext-102 cl6">
+                    Availability: Out of Stock
+                  </p>
+                <% } %></td>
+              
+                <td class="column-3" id="amount-input">Rs. <%= item.offerprice.toFixed(2) %></td>
+                <td class="column-4" style="align-items: center;">
+                  <% if (item.outOfStock) { %>
+                    <span class="text-danger">Out of stock</span>
+                  <% } else { %>
+                    <div class="quantity" style="display: flex; align-items: center;">
+                      <button type="button" class="minus-btn btn btn-secondary" data-product="<%= item.product._id %>">-</button>
+                      <input type="number" style="width: 70px; text-align: center;" class="form-control quantity-input" name="quantity_<%= item.product._id %>" value="<%= item.quantity %>" readonly max="<%= item.product.quantity %>">
+                      <button type="button" class="plus-btn btn btn-secondary" data-product="<%= item.product._id %>">+</button>
+                    </div>
+                  <% } %>
+                  
+                </td>
+                <td class="column-5" id="price_<%= item.product._id %>">Rs.<%= item.offerprice.toFixed(2) * item.quantity %></td>
+                <td class="column-6 pr-2">
+                  <a href="#" style="color: rgb(69, 67, 67);" data-toggle="modal" data-target="#confirmationModal">Remove</a>
+                </td>
+                
+                <!-- Confirmation Modal -->
+                <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        Are you sure you want to remove this item?
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <a href="/deletecart/<%= item.product._id %>" class="btn btn-primary">Remove</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </tr>
+              <% }) %>
+              <% } %>
+            </table>
+          </div>
+      
+        </div>
+      </div>
+      <div class="col-sm-10 col-lg-7 col-xl-5 m-lr-auto m-b-50">
+        <div class="bor10 p-lr-40 p-t-30 p-b-40 m-l-63 m-r-40 m-lr-0-xl p-lr-15-sm">
+          <h4 class="mtext-109 cl2 p-b-30">
+            Cart Totals
+          </h4>
+          <div class="flex-w flex-t bor12 p-b-13">
+            <div class="size-208">
+              <span class="stext-110 cl2">
+                Total Amount:
+              </span>
+              </div>
+              <div class="size-209">
+                <span class="mtext-110 cl2" id="totalAmount">Rs. 0</span>
+              </div>
+            </div>
+            <% if (cartItems.length === 0) { %>
+              
+              <% } else { %>
+            <a href="/checkout" class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
+              Proceed to Checkout
+            </a>
+            <% }%>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <%- include('../user/partials/footer.ejs') %>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+  <script>
+  $(document).ready(function() {
+  updateTotalAmount();
+
+  $('.minus-btn').on('click', function() {
+    updateCartItemQuantity(this, -1);
+  });
+
+  $('.plus-btn').on('click', function() {
+    updateCartItemQuantity(this, 1);
+  });
+
+  function updateCartItemQuantity(btn, change) {
+    var $quantityInput = $(btn).siblings('.quantity-input');
+    var quantity = parseInt($quantityInput.val());
+    var productId = $(btn).data('product');
+    var maxQuantity = parseInt($quantityInput.attr('max')); // Get the maximum allowed quantity from the input attribute
+
+    if (!isNaN(quantity)) {
+      quantity += change;
+      if (quantity <= 1) {
+        quantity = 1;
+      } else if (!isNaN(maxQuantity) && quantity > maxQuantity) {
+        quantity = maxQuantity; // Limit the quantity to the maximum allowed quantity
+      }
+      $quantityInput.val(quantity);
+
+      updateCartItem(productId, quantity);
+      updateTotalAmount();
+    }
+  }
+
+    function updateCartItem(productId, quantity) {
+      $.ajax({
+        type: 'POST',
+        url: '/quantityupdate',
+        data: {
+          product: productId,
+          quantity: quantity
+        },
+        success: function(response) {
+          var totalPrice = quantity * response.price;
+          $('#price_' + productId).text('Rs.' + totalPrice.toFixed(2));
+        },
+        error: function(error) {
+          console.log(error);
+        }
+      });
+    }
+
+    function updateTotalAmount() {
+  var subtotal = 0;
+  $('.table-shopping-cart tbody tr').each(function() {
+    var quantity = parseInt($(this).find('.quantity-input').val());
+    var price = parseFloat($(this).find('.column-3').text().replace('Rs.', ''));
+
+    if (!isNaN(quantity) && !isNaN(price)) {
+      var total = quantity * price;
+      subtotal += total;
+    }
+  });
+
+  var total = subtotal.toFixed(2);
+
+  $('#totalAmount').text('Rs.' + total);
+
+  // Send AJAX request to store the total amount in the database
+
+}
+
+  });
+
+
+
+</script>

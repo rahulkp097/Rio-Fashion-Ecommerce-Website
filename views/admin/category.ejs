@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+
+<!-- =========================================================
+* Sneat - Bootstrap 5 HTML Admin Template - Pro | v1.0.0
+==============================================================
+
+* Product Page: https://themeselection.com/products/sneat-bootstrap-html-admin-template/
+* Created by: ThemeSelection
+* License: You must have a valid license purchased in order to legally use the theme for your project.
+* Copyright ThemeSelection (https://themeselection.com)
+
+=========================================================
+ -->
+<!-- beautify ignore:start -->
+<html
+  lang="en"
+  class="light-style layout-menu-fixed"
+  dir="ltr"
+  data-theme="theme-default"
+  data-assets-path="../assets/"
+  data-template="vertical-menu-template-free"
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+    />
+
+    <title>Rio-Fashion</title>
+
+    <meta name="description" content="" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Icons. Uncomment required icon fonts -->
+    <link rel="stylesheet" href="../assets/vendor/fonts/boxicons.css" />
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="../assets/vendor/css/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="../assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="../assets/css/demo.css" />
+
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+
+    <link rel="stylesheet" href="../assets/vendor/libs/apex-charts/apex-charts.css" />
+<!-- jQuery library -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.1/css/jquery.dataTables.min.css">
+
+<!-- DataTables JavaScript -->
+
+
+    <!-- Page CSS -->
+
+    <!-- Helpers -->
+   
+  </head>
+
+  <body>
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        <!-- Menu -->
+
+        <!-- Include the sidebar partial -->
+<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+  <%- include('../admin/partials/sidebar.ejs') %>
+</aside>
+        <!-- / Menu -->
+
+        <!-- Layout container -->
+        <div class="layout-page">
+          <!-- Navbar -->
+
+        <!-- Include the topbar partial -->
+<nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
+  <%- include('../admin/partials/navbar.ejs') %>
+</nav>
+            
+
+          <!-- / Navbar -->
+
+          <!-- Content wrapper -->
+          <div class="content-wrapper">
+            <!-- Content -->
+
+<!-- Modal -->
+<form action="/admin/addcategory" method="post" enctype="multipart/form-data">
+  <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addCategoryModalLabel">Add Category</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Category Name -->
+          <div class="mb-3">
+            <label for="categoryName" class="form-label">Category Name</label>
+            <input type="text" name="name" class="form-control" id="categoryName" placeholder="Enter category name" required>
+          </div>
+          <!-- Icon Selection -->
+          
+          <!-- Image Upload -->
+          <div class="mb-3">
+            <label for="categoryImage" class="form-label">Upload Icon Image</label>
+            <input type="file" name="image" class="form-control" accept="image/*" id="categoryImage">
+          </div>
+
+          <!-- Offer Information -->
+          <div class="mb-3">
+            <label for="offerAvailable" class="form-label">Offer Available</label>
+            <select name="offerAvailable" class="form-control" id="offerAvailable">
+              <option value="true">Yes</option>
+              <option value="false" selected>No</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="discountPercentage" class="form-label">Discount Percentage</label>
+            <input type="number" name="discountPercentage" class="form-control" id="discountPercentage" placeholder="Enter discount percentage">
+          </div>
+
+          <div class="mb-3">
+            <label for="offerDescription" class="form-label">Offer Description</label>
+            <textarea name="offerDescription" class="form-control" id="offerDescription" placeholder="Enter offer description"></textarea>
+          </div>
+
+      
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Add Category</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+
+
+
+
+
+
+ <div class="container-xxl flex-grow-1 container-p-y">
+  <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Product /</span> Category</h4>
+  <% if(typeof message !=='undefined' ){ %>
+    <p style="color:#fb4e37">
+      <%= message %>
+    </p>
+    <% } %>
+  <!-- Basic Bootstrap Table -->
+  <div class="p-2">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoryModal">Add Category</button>
+
+  </div>
+
+
+  <div class="card">
+    <h5 class="card-header">List of Categories</h5>
+    <div class="table-responsive text-nowrap">
+      <table class="table" id="dataTable">
+        <thead>
+          <tr>
+            <th>Sl.No</th>
+            <th>Icon</th>
+            <th>Category</th>
+            <th>Offers</th>
+            <th>Edit</th>
+            <th>List/Unlist</th>
+          </tr>
+        </thead>
+        <tbody class="table-border-bottom-0">
+          <% categories.forEach(function(category, number) { %>
+
+            <tr>
+              <td><%= number+1 %></td>
+              <td>
+                <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
+                  <li
+                    data-bs-toggle="tooltip"
+                    data-popup="tooltip-custom"
+                    data-bs-placement="top"
+                    title="<%= category.name %>"
+                  >
+                    <img src="<%='/images/'+category.image%>" style="width: 70px; height: 70px;" />
+                  </li>
+                </ul>
+              </td>
+              <td><%= category.name %></td>
+
+              <% if (category.offer && category.offer.isOfferAvailable) { %>
+                <td>
+                  <p>Offer Available</p>
+                  <p>Discount Percentage: <%= category.offer.discountPercentage %>%</p>
+                  <p>Offer Description: <%= category.offer.offerDescription %></p>
+                 
+                  
+                </td>
+              <% } else { %>
+                <td>No Offer Available</td>
+              <% } %>
+            
+              <td>
+                <div>
+                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editCategoryModal<%= category._id %>">Edit</button>
+                </div>
+              </td>
+            
+              <td>
+                <a href="/admin/category/action/<%= category._id %>">
+                  <% if (category.isDeleted) { %>
+                    <button type="button" class="btn btn-success">List</button>
+                  <% } else { %>
+                    <button type="button" class="btn btn-danger">Unlist</button>
+                  <% } %>
+                </a>
+              </td>
+            
+             
+            </tr>
+            
+          <!--/ edit modal -->
+
+          <!-- Modal -->
+          <form action="/admin/editcategory/<%= category._id %>" method="post" enctype="multipart/form-data">
+            <div class="modal fade" id="editCategoryModal<%= category._id %>" tabindex="-1" aria-labelledby="editCategoryModalLabel<%= category._id %>" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="editCategoryModalLabel<%= category._id %>">Edit Category</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <!-- Category Name -->
+                    <div class="mb-3">
+                      <label for="categoryName" class="form-label">Category Name</label>
+                      <input type="text" name="name" class="form-control" id="categoryName" value="<%= category.name %>" placeholder="Enter category name" required>
+                    </div>
+                    <!-- Icon Selection -->
+          
+                    <!-- Image Upload -->
+                    <div class="mb-3">
+                      <label for="categoryImage" class="form-label">Upload Icon Image</label>
+                      <input type="file" name="image" class="form-control" accept="image/*" id="categoryImage">
+                    </div>
+          
+                    <!-- Offer Information -->
+                    <div class="mb-3">
+                      <label for="offerAvailable" class="form-label">Offer Available</label>
+                      <select name="offerAvailable" class="form-control" id="offerAvailable">
+                        <option value="false" <%= !category.offer || !category.offer.isOfferAvailable ? 'selected' : '' %>>No</option>
+                        <option value="true" <%= category.offer && category.offer.isOfferAvailable ? 'selected' : '' %>>Yes</option>
+                      </select>
+                    </div>
+          
+                    <div class="mb-3">
+                      <label for="discountPercentage" class="form-label">Discount Percentage</label>
+                      <input type="number" name="discountPercentage" class="form-control" id="discountPercentage" value="<%= category.offer ? category.offer.discountPercentage : '' %>" placeholder="Enter discount percentage">
+                    </div>
+          
+                    <div class="mb-3">
+                      <label for="offerDescription" class="form-label">Offer Description</label>
+                      <textarea name="offerDescription" class="form-control" id="offerDescription" placeholder="Enter offer description"><%= category.offer ? category.offer.offerDescription : '' %></textarea>
+                    </div>
+          
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Update Category</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+          
+
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Core JS -->
+<!-- build:js assets/vendor/js/core.js -->
+<script src="../assets/vendor/js/helpers.js"></script>
+<script src="../assets/js/config.js"></script>
+<script src="../assets/vendor/libs/jquery/jquery.js"></script>
+<script src="../assets/vendor/libs/popper/popper.js"></script>
+<script src="../assets/vendor/js/bootstrap.js"></script>
+<script src="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+<script src="../assets/vendor/js/menu.js"></script>
+<!-- endbuild -->
+
+<!-- Vendors JS -->
+<script src="../assets/vendor/libs/apex-charts/apexcharts.js"></script>
+
+<!-- Main JS -->
+<script src="../assets/js/main.js"></script>
+
+<!-- Page JS -->
+<script src="../assets/js/dashboards-analytics.js"></script>
+
+<!-- Place this tag in your head or just before your close body tag. -->
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+<script src="https://cdn.datatables.net/1.11.1/js/jquery.dataTables.min.js"></script>
+
+<script>
+
+</script>

@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="/checkout/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="/checkout/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="/checkout/css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="/checkout/css/jquery-ui.min.css" type="text/css">
+    <link rel="stylesheet" href="/checkout/css/magnific-popup.css" type="text/css">
+    <link rel="stylesheet" href="/checkout/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="/checkout/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="/checkout/css/style.css" type="text/css">
+
+    <style>
+        .selected-address {
+            display: none;
+            margin-top: 20px;
+        }
+        .hidden-text {
+         display: none;
+                        }
+
+        .address-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-gap: 20px;
+        }
+
+        .address-item {
+            border: 1px solid #ccc;
+            padding: 20px;
+        }
+
+        .address-details {
+            margin-top: 10px;
+        }
+
+        .address-name {
+            font-weight: bold;
+        }
+
+        .address-line {
+            display: block;
+        }
+    </style>
+
+</head>
+
+<%- include('../user/partials/header.ejs') %>
+
+<body style="background-color: white;">
+    <div class="container">
+        <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
+            <a href="/" class="stext-109 cl8 hov-cl1 trans-04">
+                Home
+                <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+            </a>
+
+            <span class="stext-109 cl4">
+                Shopping Cart
+            </span>
+        </div>
+    </div>
+
+
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Offcanvas Menu Begin -->
+
+    <!-- Checkout Section Begin -->
+    <section class="checkout spad">
+        <div class="container">
+
+            <div class="row">
+
+                <div class="col-lg-8">
+
+                    <div class="col-lg-8">
+                        <% if (addresses && addresses.length > 0) { %>
+                        <div class="saved-addresses">
+                            <h5>Saved Addresses</h5>
+                            <div class="address-grid">
+                                <% addresses.reverse().forEach((address) => { %>
+                                <div class="address-item">
+                                    <input type="radio" name="address" value="<%= address._id %>">
+                                    <label>
+                                        <div class="address-details">
+                                            <span class="address-name">Name: <%= address.name %></span>
+                                            <span class="address-line">House / Building No:
+                                                <%= address.houseNumber %></span>
+                                            <span class="address-line">City: <%= address.city %></span>
+                                            <span class="address-line">State: <%= address.state %></span>
+                                            <span class="address-line">Pin: <%= address.pin %></span>
+                                            <span class="address-line">Mobile Number: <%= address.phone %></span>
+                                        </div>
+                                    </label>
+                                </div>
+                                <% }) %>
+                            </div>
+                        </div>
+                        <% } %>
+                    </div>
+
+
+                    <div class="col-lg-12 pt-3">
+                        <button type="button" class="site-btn" data-toggle="modal"
+                            data-target="#addAddressModal">Add Address</button>
+
+                    </div>
+
+                </div>
+                <div class="col-lg-4">
+
+                    <div class="checkout__order " style="background-color:rgb(251 251 251);">
+                        <h5>Billing detail</h5>
+                        <h5>Your order</h5>
+                        <div class="checkout__order__product">
+                            <ul>
+                                <li>
+                                    <span class="top__text">Product</span>
+                                    <span class="top__text__right">Total</span>
+                                </li>
+                                <% cartItems.forEach((item, index) => { %>
+                                <li>
+                                    <span class="hidden-text"><%= item.product._id %></span>
+                                    <%= `${index + 1}. ${item.product.title} (${item.quantity}*${item.product.sellingprice})` %>
+                                    <span>Rs. <%= item.product.sellingprice * item.quantity %></span>
+                                </li>
+                                <% }) %>
+                            </ul>
+                        </div>
+                        
+                       
+                        
+                        
+                        <div class="checkout__order__total">
+                            <ul>
+                                <li>Subtotal <span> <span id="subtotalamount">Calculating...</span></span></li>
+                                <li>Discount <span> <span id="discountamount">Calculating...</span></span></li>
+                                <li>Coupon Discount <span> <span id="couponDiscount">0</span></span></li>
+                                <li>Total <span> <span id="totalAmount">Calculating...</span></span></li>
+                                
+                            </ul>
+                        </div>
+                        <div class="d-block my-3">
+                            <div class="custom-control custom-radio">
+                                <input id="online" name="paymentMethod" type="radio" class="custom-control-input" value="online" required>
+                                <label class="custom-control-label" for="online">Online Payment</label>
+                            </div>
+                            <div class="custom-control custom-radio">
+                                <input id="cod" name="paymentMethod" type="radio" class="custom-control-input" value="cod" required>
+                                <label class="custom-control-label" for="cod">Cash on Delivery</label>
+                            </div>
+                        </div>
+
+                        
+                            <div class="flex-w flex-m m-r-20 m-tb-5">
+                              <input class="stext-104 cl2 plh4 size-117 bor13 p-lr-20 m-r-10 m-tb-5" type="text" id="couponInput" placeholder="Coupon Code">
+                          
+                              <div class="flex-c-m stext-101 cl2 size-118 bg8 bor13 hov-btn3 p-lr-15 trans-04 pointer m-tb-5" onclick="applyCoupon()">
+                                Apply coupon
+                              </div>
+                            </div>
+                            <div id="couponMessage" class="stext-103 cl2 p-tb-5"></div>
+                         
+                          
+                        
+                        <button type="button" id="placeOrderBtn" class="site-btn">Place order</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Checkout Section End -->
+
+    <!-- Add Address Modal -->
+    <div class="modal fade" id="addAddressModal" tabindex="-1" role="dialog" aria-labelledby="addAddressModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addAddressModalLabel">Add Address</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/addaddress" method="post" class="checkout__form">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="checkout__form__input">
+                                    <p>Full Name <span>*</span></p>
+                                    <input type="text" name="name" required>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 colsm-6">
+                                <div class="checkout__form__input">
+                                    <p>House No./Building No. <span>*</span></p>
+                                    <input type="text" name="houseNumber" required>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="checkout__form__input">
+                                    <p>State <span>*</span></p>
+                                    <input type="text" name="state" required>
+                                </div>
+
+
+                                <div class="checkout__form__input">
+                                    <p>City <span>*</span></p>
+                                    <input type="text" name="city" required>
+                                </div>
+
+                                <div class="checkout__form__input">
+                                    <p>Pin <span>*</span></p>
+                                    <input type="tel" name="pin" required>
+                                </div>
+
+                                <div class="checkout__form__input">
+                                    <p>Phone <span>*</span></p>
+                                    <input type="tel" name="number" required>
+                                </div>
+                            </div>
+                        </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Js Plugins -->
+    <script src="/checkout/js/jquery-3.3.1.min.js"></script>
+    <script src="/checkout/js/bootstrap.min.js"></script>
+    <script src="/checkout/js/jquery.magnific-popup.min.js"></script>
+    <script src="/checkout/js/jquery-ui.min.js"></script>
+    <script src="/checkout/js/mixitup.min.js"></script>
+    <script src="/checkout/js/jquery.countdown.min.js"></script>
+    <script src="/checkout/js/jquery.slicknav.js"></script>
+    <script src="/checkout/js/owl.carousel.min.js"></script>
+    <script src="/checkout/js/jquery.nicescroll.min.js"></script>
+    <script src="/checkout/js/main.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        // JavaScript code to calculate and update the total amount and discount dynamically
+        document.addEventListener('DOMContentLoaded', function() {
+            updateSubTotalAmount();
+
+            function updateSubTotalAmount() {
+                var subtotal = 0;
+                <% cartItems.forEach((item) => { %>
+                subtotal += <%= item.product.sellingprice %> * <%= item.quantity %>;
+                <% }) %>
+
+                var totalAmount = 0;
+                <% cartItems.forEach((item) => { %>
+                totalAmount += <%= item.offerprice %> * <%= item.quantity %>;
+                <% }) %>
+
+                var discount = subtotal - totalAmount;
+
+                document.getElementById('subtotalamount').textContent = 'Rs ' + subtotal.toFixed(2);
+                document.getElementById('totalAmount').textContent = 'Rs ' + totalAmount.toFixed(2);
+                document.getElementById('discountamount').textContent = 'Rs ' + discount.toFixed(2);
+            }
+        });
+    </script>
+
+<script>
+  function placeOrder() {
+  const selectedAddress = document.querySelector('input[name="address"]:checked');
+  if (!selectedAddress) {
+    alert('Please select an address.');
+    return;
+  }
+
+  const selectedPayment = document.querySelector('input[name="paymentMethod"]:checked');
+  if (!selectedPayment) {
+    alert('Please select a payment method.');
+    return;
+  }
+
+  // Retrieve the necessary data to send to the server-side
+  const addressId = selectedAddress.value;
+  const paymentMethod = selectedPayment.value;
+  const orderData = {
+    addressId: addressId,
+    paymentMethod: paymentMethod,
+    totalAmount: document.getElementById('totalAmount').textContent,
+    subTotal: document.getElementById('subtotalamount').textContent,
+    discount: document.getElementById('discountamount').textContent,
+    couponDiscount:document.getElementById('couponDiscount').textContent,
+    products: []
+  };
+
+  // Retrieve product details
+  const productItems = document.querySelectorAll('.checkout__order__product li');
+  productItems.forEach(item => {
+    const productText = item.textContent;
+    const hiddenText = item.querySelector('.hidden-text');
+    if (hiddenText) {
+      const productId = hiddenText.textContent.trim();
+      const quantityAndPrice = productText.substring(productText.indexOf('(') + 1, productText.indexOf(')')).trim();
+      const [quantity, price] = quantityAndPrice.split('*').map(str => parseFloat(str.trim()));
+      const total = quantity * price;
+      const product = {
+        _id: productId,
+        quantity: quantity,
+        price: price,
+        total: total
+      };
+      orderData.products.push(product);
+    }
+  });
+
+  // Send the order data to the server-side
+  fetch('/submit-order', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(orderData)
+  })
+    .then(response => response.json())
+    .then(data => {
+      // Handle the response from the server
+      if (data.success) {
+        if (paymentMethod === 'cod') {
+          // Cash on Delivery
+          window.location.href = `/success`;
+        } else {
+          // Razorpay payment
+          const razorpayOrderId = data.razorpayOrderId;
+          console.log(razorpayOrderId)
+          const options = {
+            key: 'rzp_test_MD3Erjq5yf5E59', // Replace with your Razorpay API key
+            amount: parseFloat(orderData.totalAmount.replace('Rs ', '')) * 100, // Amount in paise or the smallest currency unit
+            currency: 'INR',
+            order_id: razorpayOrderId,
+            name: 'RioFashion',
+            description: 'Order Payment',
+            handler: function (response) {
+              // Redirect to the success page or perform any necessary actions
+              window.location.href = `/success`;
+            },
+            prefill: {
+              name: 'John Doe', // Replace with the customer's name
+              email: 'john@example.com', // Replace with the customer's email
+              contact: '9876543210' // Replace with the customer's contact number
+            }
+          };
+          const razorpayInstance = new Razorpay(options);
+          razorpayInstance.open();
+        }
+      } else {
+        alert('Failed to place order. Please try again.');
+        // Handle the error or display an error message
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Failed to place order. Please try again.');
+    });
+}
+
+document.getElementById('placeOrderBtn').addEventListener('click', placeOrder);
+
+</script>
+
+
+<script>
+function applyCoupon() {
+  const couponCode = document.getElementById('couponInput').value;
+  const totalAmount = parseFloat(document.getElementById('totalAmount').textContent.replace('Rs ', '')); // Get the total amount from the HTML element
+    
+  fetch("/applyCoupon", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ couponCode,totalAmount })
+    })
+    .then(response => response.json())
+    .then(data => {
+      const couponMessage = document.getElementById('couponMessage');
+      if (data.success) {
+        couponMessage.textContent = `Coupon "${couponCode}" applied successfully!`;
+        // Assuming you want to update the total amount on success
+        const couponDiscountElement = document.getElementById('couponDiscount');
+      couponDiscountElement.textContent = 'Rs ' + data.discountAmount.toFixed(2);
+        document.getElementById('totalAmount').textContent = 'Rs ' + data.discountedTotal.toFixed(2);
+      } else {
+        couponMessage.textContent = data.message; // Display the error message from the server
+      }
+    })
+    .catch(error => {
+      console.error('Error applying coupon:', error);
+      const couponMessage = document.getElementById('couponMessage');
+      couponMessage.textContent = `An error occurred while applying the coupon. Please try again later.`;
+    });
+  }
+
+  </script>
+  
+  
+
+
+<%- include('../user/partials/footer.ejs') %>
+
+</html>

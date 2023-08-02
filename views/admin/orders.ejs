@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+
+<!-- =========================================================
+* Sneat - Bootstrap 5 HTML Admin Template - Pro | v1.0.0
+==============================================================
+
+* Product Page: https://themeselection.com/products/sneat-bootstrap-html-admin-template/
+* Created by: ThemeSelection
+* License: You must have a valid license purchased in order to legally use the theme for your project.
+* Copyright ThemeSelection (https://themeselection.com)
+
+=========================================================
+ -->
+<!-- beautify ignore:start -->
+<html
+  lang="en"
+  class="light-style layout-menu-fixed"
+  dir="ltr"
+  data-theme="theme-default"
+  data-assets-path="../assets/"
+  data-template="vertical-menu-template-free"
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+    />
+
+    <title>Rio-Fashion</title>
+
+    <meta name="description" content="" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Icons. Uncomment required icon fonts -->
+    <link rel="stylesheet" href="../assets/vendor/fonts/boxicons.css" />
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="../assets/vendor/css/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="../assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="../assets/css/demo.css" />
+
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+
+    <link rel="stylesheet" href="../assets/vendor/libs/apex-charts/apex-charts.css" />
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+<!-- jQuery library -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.1/css/jquery.dataTables.min.css">
+
+<!-- DataTables JavaScript -->
+
+
+
+    <!-- Page CSS -->
+
+    <!-- Helpers -->
+    <script src="../assets/vendor/js/helpers.js"></script>
+
+    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+    <script src="../assets/js/config.js"></script>
+  </head>
+
+  <body>
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        <!-- Menu -->
+
+        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+          <%- include('../admin/partials/sidebar.ejs') %>
+        </aside>
+        <!-- / Menu -->
+
+        <!-- Layout container -->
+        <div class="layout-page">
+          <!-- Navbar -->
+
+          <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
+            <%- include('../admin/partials/navbar.ejs') %>
+          </nav>
+
+
+          
+<style>
+  .wrap-text {
+    white-space: normal;
+  }
+  </style>
+  
+  <div class="container-xxl flex-grow-1 container-p-y">
+    <div class="content-wrapper">
+          
+<!-- Responsive Table -->
+<!-- Responsive Table -->
+<div class="card">
+  <h5 class="card-header">Order List</h5>
+  <div class="table-responsive text-nowrap">
+    <table class="table" id="dataTable">
+      <thead>
+        <tr class="text-nowrap">
+          <th>No.</th>
+          <th>User</th>
+          <th>Action</th>
+          <th>Subtotal</th>
+          <th>Discount</th>
+          <th>Total</th>
+          <th>Payment Method</th>
+          <th>Shipping Address</th>
+          <th>Date</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% orders.reverse().forEach(function(order, index) { %>
+          <tr>
+            <td><%= index + 1 %></td>
+            <td><%= order.user.username %></td>
+            <td>
+              <button type="button" class="btn btn-link product-modal-btn" data-bs-toggle="modal" data-bs-target="#productModal<%= index %>">View Products</button>
+            </td>
+            <td><%= order.subtotal %></td>
+            <td><%= order.discount %></td>
+            <td><%= order.total %></td>
+            <td><%= order.paymentMethod %></td>
+            <td>
+              <%= order.shippingAddress.name %><br>
+              <%= order.shippingAddress.houseNumber %><br>
+              <%= order.shippingAddress.city %>, <%= order.shippingAddress.state %><br>
+              <%= order.shippingAddress.pin %><br>
+              <%= order.shippingAddress.phone %>
+            </td>
+            <td class="wrap-text"><%= order.createdAt %></td>
+
+            
+            <td class="wrap-text">
+              <div id="messageDiv"></div>
+
+              <% if (order.status === 'Returned') { %>
+                Return successfully
+              <% } else { %>
+                <% if (order.status === 'Return Requested') { %>
+                  <button class="btn btn-primary btn-sm" onclick="confirmReturn('<%= order._id %>')">Confirm Return</button>
+                <% } else { %>
+                  <select class="form-select order-status-select" aria-label="Order Status" data-order-id="<%= order._id %>">
+                    <option value="Pending" <%= order.status === 'Pending' ? 'selected' : '' %>>Pending</option>
+                    <option value="Shipped" <%= order.status === 'Shipped' ? 'selected' : '' %>>Shipped</option>
+                    <option value="Delivered" <%= order.status === 'Delivered' ? 'selected' : '' %>>Delivered</option>
+                    <option value="Cancelled" <%= order.status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
+                  </select>
+                <% } %>
+              <% } %>
+            </td>
+            
+            
+            
+          </tr>
+          <div class="modal fade" id="productModal<%= index %>" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="productModalLabel">Product Details</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="row">
+                    <% order.items.forEach(function(item) { %>
+                      <div class="col-4">
+                        <div class="text-center">
+                          <img style="height: 50px; width: 50px;" src="/images/<%= item.product.image[0] %>" alt="Product Image">
+                          <div>
+                            <p class="wrap-text"> <%= item.product.title %> - Rs.<%= item.product.offerprice %></p>
+                            <p><strong>Quantity:</strong> <%= item.quantity %></p>
+                          </div>
+                        </div>
+                      </div>
+                    <% }) %>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+</div>
+<!-- Product Modal -->
+
+
+
+
+
+
+
+
+            <!-- Footer -->
+            <footer class="content-footer footer bg-footer-theme">
+              <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+            
+             
+              </div>
+            </footer>
+            <!-- / Footer -->
+
+            <div class="content-backdrop fade"></div>
+          </div>
+          <!-- Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+      </div>
+
+      <!-- Overlay -->
+      <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <!-- / Layout wrapper -->
+
+    <!-- Core JS -->
+    <!-- build:js assets/vendor/js/core.js -->
+    <script src="../assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="../assets/vendor/libs/popper/popper.js"></script>
+    <script src="../assets/vendor/js/bootstrap.js"></script>
+    <script src="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+
+    <script src="../assets/vendor/js/menu.js"></script>
+    <!-- endbuild -->
+
+    <!-- Vendors JS -->
+    <script src="../assets/vendor/libs/apex-charts/apexcharts.js"></script>
+
+    <!-- Main JS -->
+    <script src="../assets/js/main.js"></script>
+    <script src="https://cdn.datatables.net/1.11.1/js/jquery.dataTables.min.js"></script>
+    <!-- Page JS -->
+    <script src="../assets/js/dashboards-analytics.js"></script>
+
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  </body>
+</html>
+
+
+<script src="https://cdn.datatables.net/1.11.1/js/jquery.dataTables.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('#dataTable').DataTable();
+  });
+</script>
+
+<script>
+  $(document).ready(function() {
+    $('.order-status-select').change(function() {
+      var orderId = $(this).data('order-id');
+      var newStatus = $(this).val();
+
+      $.ajax({
+        url: '/admin/updateOrderStatus/' + orderId,
+        method: 'POST',
+        data: { status: newStatus },
+        success: function(response) {
+          console.log(response); // You can handle the response here if needed
+        },
+        error: function(error) {
+          console.log(error); // Handle the error if necessary
+        }
+      });
+    });
+  });
+</script>
+<script>
+  function confirmReturn(orderId) {
+    fetch(`/admin/confirm-return/${orderId}`, {
+      method: "POST",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        const messageDiv = document.getElementById("messageDiv");
+        if (data.message) {
+          messageDiv.textContent = data.message;
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+        }
+      })
+      .catch((error) => {
+        console.error("Error confirming return:", error);
+      });
+  }
+</script>
+

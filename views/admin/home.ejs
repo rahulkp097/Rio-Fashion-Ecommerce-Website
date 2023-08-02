@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+
+<!-- =========================================================
+* Sneat - Bootstrap 5 HTML Admin Template - Pro | v1.0.0
+==============================================================
+
+* Product Page: https://themeselection.com/products/sneat-bootstrap-html-admin-template/
+* Created by: ThemeSelection
+* License: You must have a valid license purchased in order to legally use the theme for your project.
+* Copyright ThemeSelection (https://themeselection.com)
+
+=========================================================
+ -->
+<!-- beautify ignore:start -->
+<html
+  lang="en"
+  class="light-style layout-menu-fixed"
+  dir="ltr"
+  data-theme="theme-default"
+  data-assets-path="../assets/"
+  data-template="vertical-menu-template-free"
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+    />
+
+    <title>Rio-Fashion</title>
+
+    <meta name="description" content="" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="../assets/img/favicon/favicon.ico">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Icons. Uncomment required icon fonts -->
+    <link rel="stylesheet" href="../assets/vendor/fonts/boxicons.css" />
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="../assets/vendor/css/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="../assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="../assets/css/demo.css" />
+
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+
+    <link rel="stylesheet" href="../assets/vendor/libs/apex-charts/apex-charts.css" />
+
+    <!-- Page CSS -->
+
+    <!-- Helpers -->
+    <script src="../assets/vendor/js/helpers.js"></script>
+
+    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+    <script src="../assets/js/config.js"></script>
+  </head>
+
+  <body>
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        <!-- Menu -->
+
+          <!-- Include the sidebar partial -->
+<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+  <%- include('../admin/partials/sidebar.ejs') %>
+</aside>
+
+        <!-- Layout container -->
+        <div class="layout-page">
+          <!-- Navbar -->
+
+          <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
+            <%- include('../admin/partials/navbar.ejs') %>
+          </nav>
+          <!-- / Navbar -->
+
+
+               <!-- /dashboard start -->
+
+            <div class="container-xxl flex-grow-1 container-p-y">
+              <div class="row">
+                <div class="col-12">
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">Sales Report</h5>
+                      <div class="row">
+                        <div class="col-md-4">
+                          <div class="card mb-4">
+                            <div class="card-body">
+                              <h6 class="card-title">Total Sales</h6>
+                              <h6 class="card-subtitle mb-2 text-muted" id="totalSalesValue">Rs.<%=totalsales %></h6>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="card mb-4">
+                            <div class="card-body">
+                              <h6 class="card-title">Total Orders</h6>
+                              <h6 class="card-subtitle mb-2 text-muted" id="totalOrdersValue"><%=totalorder%></h6>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="card mb-4">
+                            <div class="card-body">
+                              <h6 class="card-title">Average Order Value</h6>
+                              <h6 class="card-subtitle mb-2 text-muted" id="averageOrderValue">Rs.<%=average%></h6>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="card mb-4">
+                            <div class="card-body">
+                              <h6 class="card-title">Cash on Delivery</h6>
+                              <h6 class="card-subtitle mb-2 text-muted" id="cod">Rs.<%=cod%></h6>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="card mb-4">
+                            <div class="card-body">
+                              <h6 class="card-title">Online payment</h6>
+                              <h6 class="card-subtitle mb-2 text-muted" id="onlinePayment">Rs.<%=online%></h6>
+                            </div>
+                          </div>
+                        </div>
+
+                        
+
+                        <div class="col-md-12">
+                          <div class="btn-group">
+                            <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              Sort By
+                            </button>
+                            <div class="dropdown-menu">
+                              <a class="dropdown-item" href="#" onclick="sortData('daily')">Daily</a>
+                              <a class="dropdown-item" href="#" onclick="sortData('weekly')">Weekly</a>
+                              <a class="dropdown-item" href="#" onclick="sortData('monthly')">Monthly</a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+                
+              
+
+              <div class="container-xxl flex-grow-1 container-p-y">
+                <div class="row">
+                  <div class="col-12 ">
+                    <div class="card ">
+                      <div class="card-body ">
+                        <h5 class="card-title ">Top selling products</h5>
+                        <div class="row p-5">
+                          
+                          
+
+                          <div class="row">
+                            <% topSellingProducts.forEach(function(product) { %>
+                              <div class="col-md-4 mb-4">
+                                <div class="card" style="width: 18rem;">
+                                  <img class="card-img-top" src="/images/<%= product.image[0] %>" alt="<%= product.productName %>">
+                                  <div class="card-body">
+                                    <h5 class="card-title"><%= product.productName %></h5>
+                                    <p class="card-text">Quantity Sold: <%= product.totalQuantitySold %></p>
+                              
+                                  </div>
+                                </div>
+                              </div>
+                            <% }) %>
+                          </div>
+                          
+                            </div></div></div>
+
+                          </div></div></div>
+
+
+                            <div class="container-xxl flex-grow-1 container-p-y">
+                              <div class="row">
+                                <div class="col-12 ">
+                          <div class="card ">
+                            <div class="card-body ">
+                              <h5 class="card-title ">Less performing products</h5>
+                              <div class="row p-5">
+
+
+                          <div class="row">
+                            <% lessPerformingProducts.forEach(function(product) { %>
+                              <div class="col-md-4 mb-4">
+                                <div class="card" style="width: 18rem;">
+                                  <img class="card-img-top" src="/images/<%= product.image[0] %>" alt="<%= product.productName %>">
+                                  <div class="card-body">
+                                    <h5 class="card-title"><%= product.productName %></h5>
+                                    <p class="card-text">Quantity Sold: <%= product.totalQuantitySold %></p>
+                              
+                                  </div>
+                                </div>
+                              </div>
+                            <% }) %>
+                          </div>
+
+                          
+                        </div></div></div>
+                      </div></div></div>
+
+                        <div class="container-xxl flex-grow-1 container-p-y">
+                              <div class="row">
+                                <div class="col-12 ">
+                          <div class="card ">
+                            <div class="card-body ">
+                              <h5 class="card-title ">Out of stock products</h5>
+                              <div class="row p-5">
+
+
+
+                          <div class="row">
+                            <% if (outOfStockProducts && outOfStockProducts.length > 0) { %>
+                              <% outOfStockProducts.forEach(function(product) { %>
+                              <div class="col-md-4 mb-4">
+                                <div class="card" style="width: 18rem;">
+                                  <img class="card-img-top" src="/images/<%= product.image[0] %>" alt="<%= product.productName %>">
+                                  <div class="card-body">
+                                    <h5 class="card-title"><%= product.productName %></h5>
+                                    <p class="card-text text-center">Out of stock</p>
+                              
+                                  </div>
+                                </div>
+                              </div>
+                           <% }) %>
+                            <% } else { %>
+                              <h5 class="card-title">No Out of stock products</h5>
+                             
+                            <% } %>
+                          </div>
+  
+              </div></div></div>
+            
+            </div></div></div>
+  
+   
+                </div>
+
+
+           
+
+            
+
+                <div class="container-xxl flex-grow-1 container-p-y">
+                  <div class="row">
+                    <div class="col-12 ">
+              <div class="card ">
+               
+
+                <canvas id="orderDetailsChart"></canvas>
+
+                <!-- Add a button or link in your HTML -->
+<button id="downloadReportsButton">Download Reports </button>
+
+</div></div>
+
+</div></div></div>
+
+
+    </div>
+
+
+            <!-- / Content -->
+
+            <!-- Footer -->
+            <footer class="content-footer footer bg-footer-theme">
+              <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+            
+             
+              </div>
+            </footer>
+            <!-- / Footer -->
+
+            <div class="content-backdrop fade"></div>
+          </div>
+          <!-- Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+      </div>
+
+      <!-- Overlay -->
+      <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <!-- / Layout wrapper -->
+
+    <!-- Core JS -->
+    <!-- build:js assets/vendor/js/core.js -->
+    <script src="../assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="../assets/vendor/libs/popper/popper.js"></script>
+    <script src="../assets/vendor/js/bootstrap.js"></script>
+    <script src="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+
+    <script src="../assets/vendor/js/menu.js"></script>
+    <!-- endbuild -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Vendors JS -->
+    <script src="../assets/vendor/libs/apex-charts/apexcharts.js"></script>
+
+    <!-- Main JS -->
+    <script src="../assets/js/main.js"></script>
+
+    <!-- Page JS -->
+    <script src="../assets/js/dashboards-analytics.js"></script>
+
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+  </body>
+</html>
+
+<script>
+  function sortData(interval) {
+    const elements = document.querySelectorAll('.card-subtitle');
+
+    elements.forEach((element) => {
+      element.innerHTML = 'Loading...';
+    });
+
+    const typeMap = {
+      totalSales: 'sales',
+      totalOrders: 'orders',
+      averageOrderValue: 'avgOrderValue',
+      cod:"cod",
+      onlinepayment:"onlinePayment"
+    };
+
+    const type = typeMap[elements[0].getAttribute('id')];
+
+    $.ajax({
+      url: '/admin/sort_sales_data',
+      method: 'POST',
+      data: { type: type, interval: interval }, // Include the interval parameter in the request
+      success: function (response) {
+        elements.forEach((element) => {
+          const elementId = element.getAttribute('id');
+
+          if (elementId === 'totalSalesValue') {
+            element.innerHTML = 'Rs.' + response.totalSales;
+          } else if (elementId === 'totalOrdersValue') {
+            element.innerHTML = response.totalOrders;
+          } else if (elementId === 'averageOrderValue') {
+            element.innerHTML = 'Rs.' + response.average;
+          }else if (elementId === 'onlinePayment') {
+            element.innerHTML = 'Rs.' + response.onlinePayment;
+          }else if (elementId === 'cod') {
+            element.innerHTML = 'Rs.' + response.cod;
+          }
+        });
+      },
+      error: function (error) {
+        console.error('Error fetching sales data:', error);
+        elements.forEach((element) => {
+          element.innerHTML = 'N/A';
+        });
+      }
+    });
+  }
+</script>
+
+<script>
+  fetch('/admin/getOrderDetailsData')
+    .then(response => response.json())
+    .then(data => {
+      const months = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+      ];
+
+      const labels = data.map(entry => {
+        const date = new Date(entry._id.year, entry._id.month - 1); // Subtract 1 from month to get correct index
+        return date.toLocaleString('en-US', { month: 'long' });
+      });
+
+      const values = data.map(entry => entry.totalSales);
+
+      // Create the chart
+      const ctx = document.getElementById('orderDetailsChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Order Details',
+            data: values,
+            borderColor: 'rgba(75, 192, 192, 1)',
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderWidth: 1,
+            fill: true,
+          }],
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    })
+    .catch(error => {
+      console.error('Error fetching order details data:', error);
+    });
+</script>
+
+
+
+
+<script>
+  // Frontend JavaScript to trigger the download
+const downloadReportsButton = document.getElementById('downloadReportsButton');
+downloadReportsButton.addEventListener('click', () => {
+  // Make a request to the backend PDF download endpoint
+  fetch('/admin/downloadReportsPdf')
+    .then((response) => response.blob())
+    .then((blob) => {
+      // Create a temporary URL for the downloadable PDF
+      const url = window.URL.createObjectURL(new Blob([blob], { type: 'application/pdf' }));
+
+      // Create a temporary anchor element to trigger the download
+      const tempAnchor = document.createElement('a');
+      tempAnchor.href = url;
+      tempAnchor.setAttribute('download', 'reports.pdf');
+      tempAnchor.click();
+
+      // Clean up the temporary URL and anchor element
+      window.URL.revokeObjectURL(url);
+    })
+    .catch((error) => {
+      console.error('Error downloading PDF reports:', error);
+    });
+});
+
+</script>

@@ -1,0 +1,170 @@
+<%- include('../user/partials/header.ejs') %>
+
+<!-- breadcrumb -->
+
+
+<!-- Shopping Cart -->
+<form class="bg0 p-t-75 p-b-85">
+  <div class="container">
+    <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
+      <a href="/" class="stext-109 cl8 hov-cl1 trans-04">
+        Home
+        <i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
+      </a>
+  
+      <span class="stext-109 cl4">
+       Wishlist
+      </span>
+    </div>
+  </div>
+
+ 
+  <div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
+    <div class="m-l-25 m-r--38 m-lr-0-xl">
+      <div class="wrap-table-shopping-cart">
+        <table class="table-shopping-cart">
+          <tr class="table_head">
+            <th class="column-1">Image</th>
+            <th class="column-2">Name</th>
+            <th class="column-3">Price</th>
+            <th class="column-4">Add to Cart</th>
+          
+            <th class="column-5">Action</th>
+          </tr>
+          
+          <% if (wishlistitems.length === 0) { %>
+          <tr>
+            <td colspan="6" class="text-center">Wishlist is empty</td>
+          </tr>
+          <% } else { %>
+          <% wishlistitems.forEach((item) => { %>
+          <tr class="table_row">
+            <td class="column-1">
+              <div class="how-itemcart1">   <img src="<%='/images/'+item.product.image[0]%>" alt="IMG">
+             
+              </div>
+            </td>
+            <td class="column-2"><%= item.product.title %> <br> <%= item.size %></td>
+
+            <td class="column-3" id="amount-input">Rs. <%= item.product.offerprice %></td>
+            
+            <td class="column-4">
+              <a href="/addtocart/<%= item.product._id %>?size=<%= item.size %>" style="color: rgb(69, 67, 67);">Add to cart</a>
+            </td>
+            
+            
+            <td class="column-5">
+              <a href="" style="color: rgb(69, 67, 67);" data-toggle="modal" data-target="#confirmationModal">Remove</a>
+            </td>
+            
+            <!-- Confirmation Modal -->
+            <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    Are you sure you want to remove this item?
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <a href="/wishlist/remove/<%=item.product._id%>" class="btn btn-primary">Remove</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </tr>
+          <% }) %>
+          <% } %>
+        </table>
+      </div>
+    </div>
+  </div>
+
+      </div>
+    </div>
+  </form>
+
+  <%- include('../user/partials/footer.ejs') %>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+  <script>
+  $(document).ready(function() {
+  updateTotalAmount();
+
+  $('.minus-btn').on('click', function() {
+    updateCartItemQuantity(this, -1);
+  });
+
+  $('.plus-btn').on('click', function() {
+    updateCartItemQuantity(this, 1);
+  });
+
+  function updateCartItemQuantity(btn, change) {
+    var $quantityInput = $(btn).siblings('.quantity-input');
+    var quantity = parseInt($quantityInput.val());
+    var productId = $(btn).data('product');
+    var maxQuantity = parseInt($quantityInput.attr('max')); // Get the maximum allowed quantity from the input attribute
+
+    if (!isNaN(quantity)) {
+      quantity += change;
+      if (quantity <= 1) {
+        quantity = 1;
+      } else if (!isNaN(maxQuantity) && quantity > maxQuantity) {
+        quantity = maxQuantity; // Limit the quantity to the maximum allowed quantity
+      }
+      $quantityInput.val(quantity);
+
+      updateCartItem(productId, quantity);
+      updateTotalAmount();
+    }
+  }
+
+    function updateCartItem(productId, quantity) {
+      $.ajax({
+        type: 'POST',
+        url: '/quantityupdate',
+        data: {
+          product: productId,
+          quantity: quantity
+        },
+        success: function(response) {
+          var totalPrice = quantity * response.price;
+          $('#price_' + productId).text('Rs.' + totalPrice);
+        },
+        error: function(error) {
+          console.log(error);
+        }
+      });
+    }
+
+    function updateTotalAmount() {
+  var subtotal = 0;
+  $('.table-shopping-cart tbody tr').each(function() {
+    var quantity = parseInt($(this).find('.quantity-input').val());
+    var price = parseFloat($(this).find('.column-3').text().replace('Rs.', ''));
+
+    if (!isNaN(quantity) && !isNaN(price)) {
+      var total = quantity * price;
+      subtotal += total;
+    }
+  });
+
+  var total = subtotal.toFixed(2);
+
+  $('#totalAmount').text('Rs.' + total);
+
+  // Send AJAX request to store the total amount in the database
+
+}
+
+  });
+
+
+
+</script>

@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html class="no-js" lang="zxx">
+
+<head>
+  
+
+
+    
+    <!--== Google Fonts ==-->
+    <link rel="stylesheet" type="text/css"
+          href="https://fonts.googleapis.com/css?family=Droid+Serif:400,400i,700,700i"/>
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Montserrat:400,700"/>
+    <link rel="stylesheet" type="text/css"
+          href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i"/>
+
+    <!--=== Bootstrap CSS ===-->
+    <link href="/profile/assets/css/vendor/bootstrap.min.css" rel="stylesheet">
+    <!--=== Font-Awesome CSS ===-->
+    <link href="/profile/assets/css/vendor/font-awesome.css" rel="stylesheet">
+    <!--=== Plugins CSS ===-->
+    <link href="/profile/assets/css/plugins.css" rel="stylesheet">
+    <!--=== Main Style CSS ===-->
+    <link href="/profile/assets/css/style.css" rel="stylesheet">
+
+    <!-- Modernizer JS -->
+    <script src="/profile/assets/js/vendor/modernizr-2.8.3.min.js"></script>
+
+    <%- include('../user/partials/header.ejs') %>
+	
+
+    <style>
+    
+    .p-9 {
+
+      padding-top: 10%;
+     }
+    </style>
+	
+ 
+</head>
+<body style="background-color: white;">
+
+
+<!--== Page Content Wrapper Start ==-->
+<div id="page-content-wrapper" class="p-9">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <!-- My Account Page Start -->
+                <div class="myaccount-page-wrapper">
+                    <!-- My Account Tab Menu Start -->
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="myaccount-tab-menu nav" role="tablist">
+                                <a href="#dashboad" class="active" data-toggle="tab"><i class="fa fa-dashboard"></i>
+                                    Dashboard</a>
+
+                                <a href="#orders" data-toggle="tab"><i class="fa fa-cart-arrow-down"></i> Orders</a>
+
+                                <a href="#address" data-toggle="tab"><i class="fa fa-map-marker"></i> address</a>
+
+                                <a href="#account-info" data-toggle="tab"><i class="fa fa-user"></i> Account Details</a>
+
+                                
+                                <a href="#referral-info" data-toggle="tab"><i class="fa fa-user-plus"></i> referralCode</a>
+
+                                <a href="/userLogout"><i class="fa fa-sign-out"></i> Logout</a>
+                            </div>
+                        </div>
+                        <!-- My Account Tab Menu End -->
+                       
+                        <!-- My Account Tab Content Start -->
+                        <div class="col-lg-9 mt-5 mt-lg-0">
+                          
+                            <div class="tab-content" id="myaccountContent">
+                                <!-- Single Tab Content Start -->
+                                <div class="tab-pane fade show active" id="dashboad" role="tabpanel">
+                                  <div class="myaccount-content">
+                                    <h3>Dashboard</h3>
+                                    
+                                    <div class="welcome">
+                                      <p>Hello, <strong><%=name%></strong></p>
+                                    </div>
+                                    <p class="mb-0">From your account dashboard, you can easily check & view your
+                                      recent orders, manage your billing addresses, and edit your
+                                      password and account details.</p>
+                                  </div>
+                                  
+                                </div>
+                                <!-- Single Tab Content End -->
+
+                                <div id="messageDiv"></div>
+
+                               <!-- Single Tab Content Start -->
+                               <div class="tab-pane fade" id="orders" role="tabpanel">
+                                <div class="myaccount-content">
+                                  <h3>Orders</h3>
+                                  
+                                  <div class="myaccount-table table-responsive text-center">
+                                    <table class="table table-bordered" id="orders-table">
+                                      <thead class="thead-light">
+                                        <tr>
+                                          <th>Sl. No</th>
+                                          <th>Order Status</th>
+                                          <th>Order Id</th>
+                                          <th>Products</th>
+                                          <th>Product Image</th>
+                                          <th>Sub Total</th>
+                                          <th>Discount</th>
+                                          <th>Total Amount</th>
+                                          <th>Payment Method</th>
+                                          <th>Shipping Address</th>
+                                          <th>Order Date</th>
+                                          <th>Action</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        <% orders.reverse().forEach(function(order, index) { %>
+                                        <tr>
+                                          <td><%= index + 1 %></td>
+                                          <td><%= order.status %></td>
+                                          <td ><%= order._id %></td>
+                                          <td>
+                                            <% order.items.forEach(function(item) { %>
+                                            <%= item.product.title %> (Rs.<%= item.product.sellingprice %> *<%= item.quantity %>) <br>
+                                            <% }) %>
+                                          </td>
+                                          <td>
+                                            <% order.items.forEach(function(item) { %>
+                                            <img src="<%= '/images/' + item.product.image[0] %>" width="50" height="50"><br>
+                                            <% }) %>
+                                          </td>
+                                          <td><%= order.subtotal %></td>
+                                          <td><%= order.discount %></td>
+                                          <td><%= order.total %></td>
+                                          <td><%= order.paymentMethod %></td>
+                                          <td>
+                                            <%= order.shippingAddress.houseNumber %>,<br>
+                                            <%= order.shippingAddress.city %>, <%= order.shippingAddress.state %>, <%= order.shippingAddress.pin %>,<br>
+                                            Phone: <%= order.shippingAddress.phone %>
+                                          </td>
+                                          <td><%= order.createdAt.toDateString() %></td>
+                                          <td>
+                                            
+                                            <% if (order.status === "Returned") { %>
+                                              <a href="/download-order/<%= order._id %>" class="btn btn-primary">Download</a>
+                                              <button type="button" class="btn btn-info btn-review" data-toggle="modal" data-target="#exampleModal-<%= index %>" data-orderid="<%= order._id %>">Review</button>
+                                              <div class="modal fade" id="exampleModal-<%= index %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                  <div class="modal-content">
+                                                    <div class="modal-header">
+                                                      <h5 class="modal-title" id="exampleModalLabel">Review</h5>
+                                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                      </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                      <form>
+                                                        <select class="form-control" name="productId" required>
+                                                          <% order.items.forEach(function(item) { %>
+                                                            <option class="product-Id" value="<%= item.product._id %>"><%= item.product.title %></option>
+                                                          <% }) %>
+                                                        </select>
+                                              
+                                                        <div class="form-group">
+                                                          <textarea class="reviewText form-control" name="reviewText" rows="4" required></textarea>
+                                                        </div>
+                                                      </form>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                     <!-- Add an inline event handler to the "Post Review" button to pass the index -->
+                                                        <button type="button" class="btn btn-primary" onclick="postreview('<%= index %>')">Post Review</button>
+
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            <% } else if (order.status === "Cancelled") { %>
+                                              Order Cancelled
+                                            <% } else if (order.status === "Delivered") { %>
+                                              <input type="text" id="returnorder-id" hidden value="<%= order._id %>" >
+                                              
+                                              <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#exampleModal">
+                                                Return
+                                              </button>
+                                              
+                                              <!-- Modal -->
+                                              <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                  <div class="modal-content">
+                                                    <div class="modal-header">
+                                                      <h5 class="modal-title" id="exampleModalLabel">Return</h5>
+                                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                      </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                      Are you sure want to Return the order
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                      <button type="button" class="btn btn-primary" onclick="returnRequest()"> Return</button>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+
+
+
+
+
+                                              <a href="/download-order/<%= order._id %>" class="btn btn-primary">Download</a>
+                                              <button type="button" class="btn btn-info btn-review" data-toggle="modal" data-target="#exampleModal-<%= index %>" data-orderid="<%= order._id %>">Review</button>
+                                              <div class="modal fade" id="exampleModal-<%= index %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                  <div class="modal-content">
+                                                    <div class="modal-header">
+                                                      <h5 class="modal-title" id="exampleModalLabel">Review</h5>
+                                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                      </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                      <form>
+                                                        <select class="form-control" name="productId" required>
+                                                          <% order.items.forEach(function(item) { %>
+                                                            <option class="product-Id" value="<%= item.product._id %>"><%= item.product.title %></option>
+                                                          <% }) %>
+                                                        </select>
+                                              
+                                                        <div class="form-group">
+                                                          <textarea class="reviewText form-control" name="reviewText" rows="4" required></textarea>
+                                                        </div>
+                                                      </form>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                     <!-- Add an inline event handler to the "Post Review" button to pass the index -->
+                                                        <button type="button" class="btn btn-primary" onclick="postreview('<%= index %>')">Post Review</button>
+
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            <% } else { %>
+                                              <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal<%= index %>" data-orderid="<%= order._id %>">
+                                                Cancel Order
+                                              </button>
+
+                                              
+                                              <a href="/download-order/<%= order._id %>" class="btn btn-primary">Download</a>
+                                              <button type="button" class="btn btn-info btn-review" data-toggle="modal" data-target="#exampleModal-<%= index %>" data-orderid="<%= order._id %>">Review</button>
+
+                                              <div class="modal fade" id="exampleModal-<%= index %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                  <div class="modal-content">
+                                                    <div class="modal-header">
+                                                      <h5 class="modal-title" id="exampleModalLabel">Review</h5>
+                                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                      </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                      <form>
+                                                        <select class="form-control" name="productId" required>
+                                                          <% order.items.forEach(function(item) { %>
+                                                            <option class="product-Id" value="<%= item.product._id %>"><%= item.product.title %></option>
+                                                          <% }) %>
+                                                        </select>
+                                              
+                                                        <div class="form-group">
+                                                          <textarea class="reviewText form-control" name="reviewText" rows="4" required></textarea>
+                                                        </div>
+                                                      </form>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                     <!-- Add an inline event handler to the "Post Review" button to pass the index -->
+                                                        <button type="button" class="btn btn-primary" onclick="postreview('<%= index %>')">Post Review</button>
+
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              
+                                            <% } %>
+                                            <!-- Add a div to display messages -->
+                                              
+
+                                          </td>
+                                          
+
+
+                                        </tr>
+                                          
+
+                                        <!-- Confirmation Modal -->
+                                        <div class="modal fade" id="exampleModal<%= index %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                          <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                              <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Cancel Order</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                  <span aria-hidden="true">&times;</span>
+                                                </button>
+                                              </div>
+                                              <div class="modal-body">
+                                                Do you want to cancel this order?<br>Order ID: <span id="order-id<%= index %>"><%= order._id %></span>
+                                              
+                                              </div>
+                                              <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-primary" onclick="cancelOrder('<%= order._id %>')" >Cancel Order</button>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <% }) %>
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                </div>
+                              </div>
+                              
+<!-- Single Tab Content End -->
+
+                                
+
+                                <!-- Single Tab Content Start -->
+                                <div class="tab-pane fade" id="address" role="tabpanel">
+                                  <div class="myaccount-content">
+                                    <h3>Address</h3>
+                                
+                                    <% if (addresses && addresses.length > 0) { %>
+                                    <div class="row">
+                                      <% addresses.forEach((address, index) => { %>
+                                      <div class="col-lg-6 col-md-6">
+                                        <div class="address-card">
+                                          <address>
+                                            <p><strong><%= address.name %></strong></p>
+                                            <p><%= address.houseNumber %>, <%= address.city %>, <%= address.state %> - <%= address.pin %></p>
+                                            <p>Phone: <%= address.phone %></p>
+                                          </address>
+                                          <div class="actions">
+                                            <a href="#" class="btn-add-to-cart d-inline-block" data-toggle="modal" data-target="#editAddressModal-<%= index %>">
+                                              <i class="fa fa-edit"></i> Edit Address
+                                            </a>
+                                          </div>
+                                        </div>
+                                      </div>
+                                
+                                      <!-- Edit Address Modal -->
+                                      <div class="modal fade" id="editAddressModal-<%= index %>" tabindex="-1" role="dialog" aria-labelledby="editAddressModalLabel-<%= index %>" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                          <div class="modal-content">
+                                            <div class="modal-header">
+                                              <h5 class="modal-title" id="editAddressModalLabel-<%= index %>">Edit Address</h5>
+                                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                              </button>
+                                            </div>
+                                            <div class="modal-body">
+                                              <form action="/profile/editaddress/<%= address._id %>" method="post" class="checkout__form">
+                                                <div class="row">
+                                                  <div class="col-lg-12">
+                                                    <div class="checkout__form__input">
+                                                      <p>Full Name <span>*</span></p>
+                                                      <input type="text" name="name" value="<%= address.name %>" required>
+                                                    </div>
+                                                    <div class="checkout__form__input">
+                                                      <p>House No./Building No. <span>*</span></p>
+                                                      <input type="text" name="houseNumber" value="<%= address.houseNumber %>" required>
+                                                    </div>
+                                                    <div class="checkout__form__input">
+                                                      <p>State <span>*</span></p>
+                                                      <input type="text" name="state" value="<%= address.state %>" required>
+                                                    </div>
+                                                    <div class="checkout__form__input">
+                                                      <p>City <span>*</span></p>
+                                                      <input type="text" name="city" value="<%= address.city %>" required>
+                                                    </div>
+                                                    <div class="checkout__form__input">
+                                                      <p>Pin <span>*</span></p>
+                                                      <input type="tel" name="pin" value="<%= address.pin %>" required>
+                                                    </div>
+                                                    <div class="checkout__form__input">
+                                                      <p>Phone <span>*</span></p>
+                                                      <input type="tel" name="number" value="<%= address.phone %>" required>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                              <button type="submit" data-dismiss="modal" class="btn btn-primary">Save changes</button>
+                                            </div>
+                                            </form>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <% }) %>
+                                    </div>
+                                    <% } else { %>
+                                    <p>No address found.</p>
+                                    <% } %>
+                                  </div>
+                                </div>
+                                
+
+
+                                <!-- Single Tab Content End -->
+
+                                <!-- Single Tab Content Start -->
+                                <div class="tab-pane fade" id="account-info" role="tabpanel">
+                                    <div class="myaccount-content">
+                                        <div class="account-details-form">
+                                          <h3>Account Details</h3>
+                                          <div class="single-input-item">
+                                            <label for="first-name">First Name</label>
+                                            <input type="text" id="first-name" value="<%= user.username %>" readonly />
+                                          </div>
+                                          <div class="single-input-item">
+                                            <label for="email">Email Address</label>
+                                            <input type="email" id="email" value="<%= user.email %>" readonly />
+                                          </div>
+                                          <div class="single-input-item">
+                                            <label for="display-name">Phone Number</label>
+                                            <input type="tel" id="display-name" value="<%= user.number %>" readonly />
+                                          </div>
+                                          <div class="single-input-item">
+                                            <label for="email">Password</label>
+                                            <input type="password" id="password" value="<%= user.password %>" readonly />
+                                          </div>
+                                        </div>
+
+                                        <form action="/profile/updatepassword" method="post">
+                                                <fieldset>
+                                                    <legend>Password change</legend>
+
+                                                    <% if (messages.error && messages.error.length > 0) { %>
+                                                      <div class="alert alert-danger">
+                                                        <% messages.error.forEach(function(error) { %>
+                                                          <p><%= error %></p>
+                                                        <% }); %>
+                                                      </div>
+                                                    <% } %>
+                                                    <% if (messages.success && messages.success.length > 0) { %>
+                                                      <div class="alert alert-success">
+                                                        <% messages.success.forEach(function(success) { %>
+                                                          <p><%= success %></p>
+                                                        <% }); %>
+                                                      </div>
+                                                    <% } %>
+                                               
+                                                    <div class="single-input-item">
+                                                        <label for="current-pwd" class="required">Current
+                                                            Password</label>
+                                                        <input type="password" name="currentpassword" id="current-pwd"
+                                                               placeholder="Current Password"/>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-lg-6">
+                                                            <div class="single-input-item">
+                                                                <label for="new-pwd" class="required">New
+                                                                    Password</label>
+                                                                <input type="password" id="new-pwd"
+                                                                       placeholder="New Password" name="newpassword"/>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-lg-6">
+                                                            <div class="single-input-item">
+                                                                <label for="confirm-pwd" class="required">Confirm
+                                                                    Password</label>
+                                                                <input type="password" id="confirm-pwd"
+                                                                       placeholder="Confirm Password" name="confirmpassword"/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+
+                                                <div class="single-input-item">
+                                                    <button type="submit" class="btn-login ">Save Changes</button>
+                                                </div>
+                                              </form>
+                                        </div>
+                                    </div>
+                                
+
+
+
+                                    <div class="tab-pane fade" id="referral-info" role="tabpanel">
+                                      <div class="myaccount-content">
+                                        <h3>Referral Code</h3>
+                                        <div>
+                                          <h4>Wallet Amount: Rs. <%= user.wallet %></h4>
+                                         
+                                            <p>Your Referral Code: <%= user.referralCode %></p>
+                                         
+                                           
+                                         
+                                        </div>
+                                      </div>
+                                    </div>
+                                    
+
+
+
+                              </div><!-- Single Tab Content End -->
+                            </div>
+                        </div>
+                        <!-- My Account Tab Content End -->
+                    </div>
+                </div>
+                <!-- My Account Page End -->
+            </div>
+        </div>
+    </div>
+</div>
+<!--== Page Content Wrapper End ==-->
+
+<!-- Footer Area Start -->
+
+
+
+<%- include('../user/partials/footer.ejs') %>
+
+
+<!--=======================Javascript============================-->
+<!--=== Jquery Min Js ===-->
+<script src="/profile/assets/js/vendor/jquery-3.3.1.min.js"></script>
+<!--=== Jquery Migrate Min Js ===-->
+<script src="/profile/assets/js/vendor/jquery-migrate-1.4.1.min.js"></script>
+<!--=== Popper Min Js ===-->
+<script src="/profile/assets/js/vendor/popper.min.js"></script>
+<!--=== Bootstrap Min Js ===-->
+<script src="/profile/assets/js/vendor/bootstrap.min.js"></script>
+<!--=== Plugins Min Js ===-->
+<script src="/profile/assets/js/plugins.js"></script>
+
+<!--=== Active Js ===-->
+<script src="/profile/assets/js/active.js"></script>
+
+<script>
+ function postreview(index) {
+  const modalElement = document.getElementById("exampleModal-" + index);
+  const productIdElement = modalElement.querySelector(".product-Id");
+  const reviewTextElement = modalElement.querySelector(".reviewText");
+
+  const productId = productIdElement.value;
+  const reviewText = reviewTextElement.value;
+
+  console.log("Product ID:", productId);
+  console.log("Review Text:", reviewText);
+
+    const data = {
+            productId: productId,
+            reviewText,
+        };
+
+        // Send the data to the server-side using AJAX
+        $.ajax({
+            url: '/submit-review', // Replace this with your server-side endpoint
+            method: "POST",
+            data: data,
+            success: function(response) {
+                // Handle the success response, e.g., show a success message to the user
+                alert("Review posted successfully!");
+                // Optionally, you can update the page or perform any other action after successful submission
+            },
+            error: function(xhr, status, error) {
+                // Handle the error response, e.g., show an error message to the usercancel-orderId
+                alert("Failed to post the review. Please try again later.");
+                console.error("Failed to post the review:", error);
+            }
+        });
+
+
+  }
+
+   function cancelOrder(orderId)  {
+  
+    console.log('Cancel Order ID:', orderId);
+    
+    $.ajax({
+      url: '/orders/cancelorder',
+      method: 'POST',
+      data: { orderId: orderId },
+      success: function(response) {
+        console.log('Order canceled successfully!');
+        location.reload();
+        
+      },
+      error: function(xhr, status, error) {
+     
+        console.error('Failed to cancel the order:', error);
+      }
+    });
+  }
+</script>
+
+
+<script>
+
+function returnRequest() {
+  orderId=document.getElementById("returnorder-id").value
+ 
+  console.log("orderId",orderId)
+  fetch(`/return-order/${orderId}`, {
+    method: "GET",
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      const messageDiv = document.getElementById("messageDiv");
+      if (data) {
+
+        
+        
+        messageDiv.textContent = "Return Request submit successfully";
+
+        setTimeout(() => {
+          window.location.reload()
+        }, 1000);
+        
+      }
+    })
+    .catch((error) => {
+      console.error("Error requesting return:", error);
+    });
+}
+</script>
+
+
+</body>
+
+</html>

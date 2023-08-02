@@ -1,0 +1,230 @@
+	
+
+	<%- include('../user/partials/header.ejs') %>
+	
+
+	
+
+
+
+
+	
+
+	<!-- Slider -->
+	<section class="section-slide">
+		<div class="wrap-slick1 rs2-slick1">
+			<div class="slick1">
+				<% banners.forEach(function(banner) { %>
+					
+				<div class="item-slick1 bg-overlay1" style="background-image: url('/images/<%= banner.image %>');" data-thumb='/images/<%= banner.image %>' data-caption="">
+					<div class="container h-full">
+						<div class="flex-col-c-m h-full p-t-100 p-b-60 respon5">
+							<div class="layer-slick1 animated visible-false" data-appear="fadeInDown" data-delay="0">
+								<span class="ltext-202 txt-center cl0 respon2">
+									Women Collection 2023
+								</span>
+							</div>
+								
+							<div class="layer-slick1 animated visible-false" data-appear="fadeInUp" data-delay="800">
+								<h2 class="ltext-104 txt-center cl0 p-t-22 p-b-40 respon1">
+									New arrivals
+								</h2>
+							</div>
+								
+							<div class="layer-slick1 animated visible-false" data-appear="zoomIn" data-delay="1600">
+								<a href="/home" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn2 p-lr-15 trans-04">
+									Shop Now
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			
+				
+				<% }) %>
+			</div>
+
+			<div class="wrap-slick1-dots p-lr-10"></div>
+		</div>
+	</section>
+
+
+	
+<!-- Banner -->
+<div class="sec-banner bg0 p-t-80 p-b-50">
+	<div class="container">
+	  <div class="row">
+		<% if (categories) { %>
+		  <% categories.forEach(function(category) { %>
+			<div class="col-md-6 col-xl-4 p-b-30 m-lr-auto">
+			  <!-- Block1 -->
+			  <div class="block1 wrap-pic-w">
+				<img src="<%='/images/'+category.image%>" alt="IMG-BANNER">
+				<a href="/categoryFilter/<%= category._id %>" class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
+				  <div class="block1-txt-child1 flex-col-l">
+					<span class="block1-name ltext-102 trans-04 p-b-8">
+					  <%= category.name %>
+					</span>
+					
+				  </div>
+				</a>
+			  </div>
+			</div>
+		  <% }) %>
+		<% } %>
+	  </div>
+	</div>
+  </div>
+  
+  <!-- Product -->
+  <section class="bg0 p-t-23 p-b-130">
+	<div class="container">
+	  <div class="p-b-10">
+		<h3 class="ltext-103 cl5">
+		  Product Overview
+		</h3>
+	  </div>
+	  
+	  <select id="perPageSelect">
+		<option selected>products per page</option>
+		<option value="6">6</option>
+		<option value="8">8</option>
+		<option value="12">12</option>
+		<!-- Add more options if desired -->
+	  </select>
+	  
+	  <!-- Filter and search -->
+	  <div class="flex-w flex-sb-m p-b-52">
+		  <div class="flex-w flex-l-m filter-tope-group m-tb-10">
+			  <a href="/">
+			  <button class="filter-btn stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5" >All Products</button>
+		  </a>
+			  <% if (categories) { %>
+				<% categories.forEach(function(category) { %>
+					
+				  <a href="/categoryFilter/<%= category._id %>" class="filter-btn stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 <%= selectedCategoryId === category._id.toString() ? 'active' : '' %>">
+					<%= category.name %>
+				  </a>
+				<% }) %>
+			  <% } %>
+			</div>
+		<div class="flex-w flex-c-m m-tb-10">
+		  <form class="flex-c-m" action="/search" method="post">
+			<input id="searchInput" class="search-input mtext-107 cl2 size-114 plh2 p-r-15" type="text" name="productName" placeholder="Search" />
+			<button class="search-btn size-113 flex-c-m fs-16 cl2 hov-cl1 trans-04" type="submit">
+			  <i class="zmdi zmdi-search"></i>
+			</button>
+		  </form>
+		</div>
+	  </div>
+
+  
+	  <div class="row isotope-grid">
+		<% if (searchResults && searchResults.length > 0) { %>
+		  <% searchResults.forEach(function(product) { %>
+			<div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item <% if (product.category && product.category.name) { %> <%= product.category.name.toLowerCase() %> <% } %>">
+			  <!-- Block2 -->
+			  <div class="block2">
+				<div class="block2-pic hov-img0">
+				  <img src="<%= '/images/' + product.image[0] %>" alt="IMG-PRODUCT">
+				  <a href="/viewproduct/<%= product._id %>" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">
+					Quick View
+				  </a>
+				</div>
+				<div class="block2-txt flex-w flex-t p-t-14">
+				  <div class="block2-txt-child1 flex-col-l">
+					<a href="/viewproduct/<%= product._id %>" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+					  <%= product.title %>
+					</a>
+					<span class="stext-105 cl3" style="text-decoration: line-through;">Rs. <%= product.sellingprice %></span>
+
+					<span style="color: red;">
+					  OfferPrice Rs. <%= product.offerprice %>
+					</span>
+				  </div>
+				</div>
+			
+			  </div>
+			</div>
+			<% }) %>
+			<% } else if (products && products.length > 0) { %>
+			  <% products.forEach(function(product) { %>
+			  <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item <% if (product.category) { %> category-<%= product.category._id %> <% } %>">
+			  <!-- Block2 -->
+			  <div class="block2">
+				<div class="block2-pic hov-img0">
+				  <img src="<%= '/images/' + product.image[0] %>" alt="IMG-PRODUCT">
+				  <a href="/viewproduct/<%= product._id %>" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">
+					Quick View
+				  </a>
+				</div>
+				<div class="block2-txt flex-w flex-t p-t-14">
+				  <div class="block2-txt-child1 flex-col-l">
+					<a href="/viewproduct/<%= product._id %>" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+					  <%= product.title %>
+					</a>
+					<span class="stext-105 cl3" style="text-decoration: line-through;">Rs. <%= product.sellingprice %></span>
+
+					<span style="color: red;">
+					  OfferPrice Rs. <%= product.offerprice %>
+					</span>
+				  </div>
+				</div>
+			
+			  </div>
+			</div>
+			<% }) %>
+			<% } else { %>
+			  <div class="col-12">
+				<p>No products found.</p>
+			  </div>
+			<% } %>
+		  </div>
+	  </div>
+
+	  <ul class="pagination justify-content-center">
+		<% if (page > 1) { %>
+		  <li class="page-item">
+			<a class="page-link" href="/products/page?page=<%= page - 1 %>&perPage=<%= perPage %>">Previous</a>
+		  </li>
+		<% } %>
+	  
+		<% for (let i = 1; i <= totalPages; i++) { %>
+		  <li class="page-item <%= i === page ? 'active' : '' %>">
+			<a class="page-link" href="/products/page?page=<%= i %>&perPage=<%= perPage %>"><%= i %></a>
+		  </li>
+		<% } %>
+	  
+		<% if (page < totalPages) { %>
+		  <li class="page-item">
+			<a class="page-link" href="/products/page?page=<%= page + 1 %>&perPage=<%= perPage %>">Next</a>
+		  </li>
+		<% } %>
+	  </ul>
+	 
+
+	</div>
+  </section>
+  <script>
+	// Get the select element
+	const perPageSelect = document.getElementById("perPageSelect");
+  
+	// Add an event listener to handle user selection
+	perPageSelect.addEventListener("change", function () {
+	  // Get the selected value
+	  const selectedValue = perPageSelect.value;
+  
+	  // Get the current URL
+	  const url = new URL(window.location.href);
+  
+	  // Update the 'perPage' query parameter with the selected value
+	  url.searchParams.set("perPage", selectedValue);
+  
+	  // Redirect to the updated URL with the selected 'perPage' value
+	  window.location.href = url.toString();
+	});
+  </script>
+
+
+  <%- include('../user/partials/footer.ejs') %>
