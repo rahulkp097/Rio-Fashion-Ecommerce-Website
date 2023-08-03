@@ -54,13 +54,19 @@ app.use(function(err, req, res, next) {
 
 
 
-mongoose.connect("mongodb://127.0.0.1:27017/rioFashion", { useNewUrlParser: true })
-.then(()=>{
-    console.log("database connected Successfully")
+const MONGO_URL = 'mongodb+srv://rahulkp097:rahulkp97@riofashion.b8fntrg.mongodb.net/RioFashion?retryWrites=true&w=majority';
+
+// Connect to MongoDB
+mongoose.connect(MONGO_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 })
-.catch((err)=>{
-    console.log(err)
-})
+  .then(() => {
+    console.log('Connected to MongoDB');
+  })
+  .catch((err) => {
+    console.error('Error connecting to MongoDB', err);
+  });
 
 
 module.exports = app;
