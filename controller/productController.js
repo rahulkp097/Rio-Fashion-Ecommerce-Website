@@ -156,7 +156,6 @@ const updateproduct = async (req, res) => {
       const product = await ProductModel.findById(id).populate('category').populate('reviews.user');;
       const products = await ProductModel.find({ isDeleted: false });
       const categoryName = product.category.name;
-      console.log('CategoryName:', categoryName);
       const userLogin = req.session.userLogin;
       let user=req.session.user
       let name=req.session.username
@@ -171,7 +170,6 @@ const updateproduct = async (req, res) => {
   product.offerprice = (product.offerprice - offerDiscountAmount).toFixed(2);
 }
 
-  
      if(req.session.userLogin){
       let name=req.session.username
       res.render("user/product",{product,user,name,products,userLogin,categoryName})
